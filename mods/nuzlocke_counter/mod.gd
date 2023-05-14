@@ -69,5 +69,7 @@ func on_battle_event(id, args):
 		var player_controller = fighter.get_controller()
 		if player_controller:
 			if player_controller is PlayerFighterController:
-				custom_save_storage.broken_tapes+=1
-				
+				if fighter.status.dead:
+					pass
+				else:
+					custom_save_system.broken_tapes+=1

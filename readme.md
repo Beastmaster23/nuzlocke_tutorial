@@ -44,7 +44,7 @@ func init_content():
 func _on_scene_changed():
 	print("Scene changed to: " + SceneManager.current_scene.name)
 ```
-
+## Test Test Test
 Now let's run the game and see what happens. We can press "`" this opens the console. This can let us load a save file. So let's load a save file with the cammand "load_file your_save". We also want to turn on permadeath "permadeath true". Then we want to go to a fight so we can die.
 
 When we are in a fight, the console will say "Scene changed to: Battle". We also see that every time we take a turn the console says something. So we should look at the godot editor and see what is happening. So let's open the godot editor and look at the nodes loaded in the scene. We see that there is a node called "Battle". So let's look at the script attached to the "Battle" node. We see that there is a node called "Events". This handles the events that happen in the battle. So let's look at the script attached to the "Events" node. We see that there is nothing but code for notifying others. We should listen to the signals that are emitted by this script. So let's add the following code to the _on_scene_changed() function:
@@ -65,6 +65,25 @@ func on_battle_event(id, args):
 Now let's run the game and see what happens. We can press "`" this opens the console. This can let us load a save file. So let's load a save file with the cammand "load_file your_save". We also want to turn on permadeath "permadeath true". Then we want to go to a fight so we can see what events get called then we die.
 
 Did you notice that there is a lot of events that get called? Right after dying their is a death event. So let's look at the args for the death event. We see that the args is a dictionary. The dictionary has 1 key "fighter". This is the fighter that died. So let's find a fighter node. Like "Player1" or "Player2". Every fighter has 3 nodes and one of them is a fighter controller. So let's look at the script attached to the "FighterController" node. We see that there is a function called "die()". This is the function that gets called when a fighter dies. But the player nodes has a player fighter controller. We can now use this information to keep track of the number of times we've died.
+
+Well ... we can't. If we did that, it would count our deaths twice. Why? It's because the death event gets called after tape dies and after the player dies. So we need to find a way to know the difference between the player dying and a tape dying. Luckily the FighterNode has a status with a dead variable. So we can use this to know if the player died.
+
+So let's add the following code to the on_battle_event() function:
+
+```gdscript
+func on_battle_event(id, args):
+	if id =="death_ending":
+		var fighter:FighterNode = args["fighter"] as FighterNode
+		print("Death of %s" % fighter.team)
+		# Look for PlayerFighterController to know if it was the player
+		var player_controller = fighter.get_controller()
+		if player_controller:
+			if player_controller is PlayerFighterController:
+				if fighter.status.dead:
+					pass
+				else:
+					custom_save_system.broken_tapes+=1
+```
 
 Oh no we need a place to store the number of times we've died. Well we can use the save file. If you look at the global files you see that their is a folder called save_system. This holds a class that handles the save files and when to save. You might think that you can just create a script and instance it and override it. But that won't work because the game already instanced an old version of the class and many times there's other files that depend on the class and have references already. So we can't just override it. But if we look further we see a class that only handles the save file. So we can extend this class and override the store() function. So let's create a script called "CustomSaveStorage.gd" and add the following code to it:
 
