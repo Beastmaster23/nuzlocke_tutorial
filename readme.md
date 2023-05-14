@@ -5,7 +5,7 @@
 Well first of all, I'm just a dude who is sharing what he knows. I'm not a professional programmer, and I'm not a professional game developer. I'm just a guy who likes to make things. So if you're looking for a professional tutorial, you're in the wrong place. But if you're looking for a tutorial that will get you started, then you're in the right place.
 
 ## An Example Mod
-This tutorial will be using the example mod that I made. You can find it here:
+This tutorial will be using the example mod that I made. You can find it [here](https://modworkshop.net/mod/42292)
 
 This mod will count the number of times you've died and broken tapes in the game. It will also show you the number of times you've died and broken tapes in the game when you are in the overworld. And to top it all off, it will also edit the save file to keep track of the number of times you've died and broken tapes in the game.
 
